@@ -24,7 +24,7 @@ jobs:
           DOMAIN2: ${{ secrets.DOMAIN2 }}
         run: |
           # 请求新的 SSL 证书，每次都重新申请
-          certbot certonly --standalone -d $DOMAIN1 -d $DOMAIN2 --agree-tos --non-interactive
+          sudo certbot certonly --standalone -d $DOMAIN1 -d $DOMAIN2 --agree-tos --non-interactive
 
       - name: Save SSL certificate details
         run: |
