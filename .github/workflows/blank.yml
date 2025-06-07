@@ -5,6 +5,13 @@ on:
     - cron: '0 0 */60 * *'  # 每60天执行一次
   workflow_dispatch:  # 支持手动触发
 
+env:
+  DOMAIN1: ${{ secrets.DOMAIN1 }}
+  DOMAIN2: ${{ secrets.DOMAIN2 }}
+  TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+  TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+  EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
+
 jobs:
   ssl_certificate:
     runs-on: ubuntu-latest
@@ -25,12 +32,6 @@ jobs:
           sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
                 
       - name: Request SSL certificate with DNS-01 challenge
-        env:
-          DOMAIN1: ${{ secrets.DOMAIN1 }}
-          DOMAIN2: ${{ secrets.DOMAIN2 }}
-          TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
-          TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
-          EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
         run: |
           # 创建腾讯云的配置文件，保存 API 密钥
           # sudo echo "[tcloud]" > /tmp/tcloud.ini
@@ -62,7 +63,7 @@ jobs:
           C=${{ secrets.C }}
 
           sudo chmod -R 755 /etc/letsencrypt/live/
-          sudo ls -l /etc/letsencrypt/live/
+          sudo ls -l /etc/letsencrypt/live/$DOMAIN1
           certificate=$(cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
           certificate_key=$(cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
