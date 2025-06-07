@@ -23,26 +23,20 @@ jobs:
 
           # 使用 pip 安装 certbot-dns-tcloud 插件
           sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
-          
-      - name: Create Tencent Cloud credentials file
+                
+      - name: Request SSL certificate with DNS-01 challenge
         env:
+          DOMAIN1: ${{ secrets.DOMAIN1 }}
+          DOMAIN2: ${{ secrets.DOMAIN2 }}
           TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
           TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+          EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
         run: |
           # 创建腾讯云的配置文件，保存 API 密钥
           sudo echo "[tcloud]" > /tmp/tcloud.ini
           sudo echo "dns_dnspod_api_id = $TENCENT_CLOUD_SECRET_ID" >> /tmp/tcloud.ini
           sudo echo "dns_dnspod_api_token = $TENCENT_CLOUD_SECRET_KEY" >> /tmp/tcloud.ini
           sudo chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
-          sudo echo "输出 /tmp/tcloud.ini 文件内容:"
-          sudo cat /tmp/tcloud.ini
-
-      - name: Request SSL certificate with DNS-01 challenge
-        env:
-          DOMAIN1: ${{ secrets.DOMAIN1 }}
-          DOMAIN2: ${{ secrets.DOMAIN2 }}
-          EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
-        run: |
           # 打印域名值进行调试
           echo "DOMAIN1: $DOMAIN1"
           echo "DOMAIN2: $DOMAIN2"
