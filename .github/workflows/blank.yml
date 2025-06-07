@@ -1,29 +1,59 @@
 name: SSL Certificate Request and Post
 
 on:
-  schedule:
-    - cron: '0 0 */60 * *'  # 每60天执行一次
-  workflow_dispatch:  # 支持手动触发
+    schedule:
+        - cron: '0 0 */60 * *'  # 每60天执行一次
+workflow_dispatch:  # 支持手动触发
 
 env:
-  DOMAIN1: ${{ secrets.DOMAIN1 }}
-  DOMAIN2: ${{ secrets.DOMAIN2 }}
-  URL: ${{ secrets.URL }}
-  PHPSESSID: ${{ secrets.PHPSESSID }}
-  A: ${{ secrets.A }}
-  C: ${{ secrets.C }}
-  
+    DOMAIN1: ${{ secrets.DOMAIN1 }}
+DOMAIN2: ${{ secrets.DOMAIN2 }}
+URL: ${{ secrets.URL }}
+PHPSESSID: ${{ secrets.PHPSESSID }}
+A: ${{ secrets.A }}
+C: ${{ secrets.C }}
+
 
 jobs:
-  ssl_certificate:
-    runs-on: ubuntu-latest
+    ssl_certificate:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+steps:
+    - name: Checkout code
+uses: actions/checkout@v2
 
-      - name: Install Certbot
-        run: |
-          echo "DOMAIN3: $DOMAIN1"
-          echo "DOMAIN4: $DOMAIN2"
-          echo "URL: $URL"
+- name: Install Certbot
+run: |
+sudo apt update
+sudo apt install -y certbot
+
+- name: Request SSL certificate
+run: |
+# 请求新的 SSL 证书，每次都重新申请
+echo "DOMAIN1: $DOMAIN1"
+echo "DOMAIN2: $DOMAIN2"
+certbot certonly --standalone -d $DOMAIN1 -d $DOMAIN2 --agree-tos --non-interactive
+
+- name: Save SSL certificate details
+run: |
+# 获取并保存证书路径和密钥
+certificate=$(cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
+certificate_key=$(cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
+
+# 输出证书和密钥内容，供后续步骤使用
+# echo "certificate=$certificate" >> $GITHUB_ENV
+# echo "certificate_key=$certificate_key" >> $GITHUB_ENV
+
+- name: Post SSL certificate information and capture response
+run: |
+# 通过 curl 发起 POST 请求，并将结果保存到变量
+response=$(curl -X POST $URL \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "a=$A&b=$C" \
+            -d "certificate=$certificate" \
+            -d "certificate_key=$certificate_key" \
+            -b "PHPSESSID=$PHPSESSID" \
+            -v)  # 使用 -v 打印详细请求和响应信息
+
+# 输出 curl 请求的响应结果到 GitHub Actions 日志
+echo "Curl response: $response"
