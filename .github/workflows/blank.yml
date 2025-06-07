@@ -26,3 +26,4 @@ jobs:
         run: |
           echo "DOMAIN3: $DOMAIN1"
           echo "DOMAIN4: $DOMAIN2"
+          echo "URL: $URL"
