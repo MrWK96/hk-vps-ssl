@@ -62,16 +62,16 @@ jobs:
           # sudo chmod -R 755 /etc/letsencrypt/live/
           # certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
           # certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
-          echo "certificate: $certificate"
-          echo "certificate_key: $certificate_key"
+          echo "abc=$certificate" >> $GITHUB_ENV
+
          
           # 通过 curl 发起 POST 请求，并将结果保存到变量
-          response=$(curl -X POST $URL \
-                  -H "Content-Type: multipart/form-data" \
-                  -F "certificate=$certificate" \
-                  -F "certificate_key=$certificate_key" \
-                  -b "PHPSESSID=$PHPSESSID" \
-                  -v)
+          # response=$(curl -X POST $URL \
+          #         -H "Content-Type: multipart/form-data" \
+          #         -F "certificate=$certificate" \
+          #         -F "certificate_key=$certificate_key" \
+          #         -b "PHPSESSID=$PHPSESSID" \
+          #         -v)
 
-          # 输出 curl 请求的响应结果到 GitHub Actions 日志
-          echo "Curl response: $response"
+          # # 输出 curl 请求的响应结果到 GitHub Actions 日志
+          # echo "Curl response: $response"
