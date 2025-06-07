@@ -15,8 +15,14 @@ jobs:
 
       - name: Install Certbot and DNS Plugin (Tencent Cloud)
         run: |
+          # 更新 apt 源
           sudo apt update
-          sudo apt install -y certbot python3-certbot-dns-tcloud
+          
+          # 安装 Certbot
+          sudo apt install -y certbot python3-pip
+
+          # 使用 pip 安装 certbot-dns-tcloud 插件
+          sudo pip3 install certbot-dns-tcloud
 
       - name: Create Tencent Cloud credentials file
         run: |
