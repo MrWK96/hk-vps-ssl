@@ -11,6 +11,8 @@ env:
   TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
   TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
   EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
+  URL: ${{ secrets.URL }}
+  PHPSESSID: ${{ secrets.PHPSESSID }}
 
 jobs:
   ssl_certificate:
@@ -56,12 +58,6 @@ jobs:
             
       - name: Post SSL certificate information and capture response
         run: |
-          # 从 GitHub Secrets 中提取敏感参数
-          URL=${{ secrets.URL }}
-          PHPSESSID=${{ secrets.PHPSESSID }}
-          A=${{ secrets.A }}
-          C=${{ secrets.C }}
-
           sudo chmod -R 755 /etc/letsencrypt/live/
           certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
           certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
@@ -69,7 +65,6 @@ jobs:
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
             -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "a=$A&b=$C" \
             -d "certificate=$certificate" \
             -d "certificate_key=$certificate_key" \
             -b "PHPSESSID=$PHPSESSID" \
