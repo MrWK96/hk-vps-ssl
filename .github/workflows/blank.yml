@@ -68,8 +68,8 @@ jobs:
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
             -H "Content-Type: application/form-data" \
-            -d "certificate=$certificate" \
-            -d "certificate_key=$certificate_key" \
+            -F "certificate=$certificate" \
+            -F "certificate_key=$certificate_key" \
             -b "PHPSESSID=$PHPSESSID" \
             -v)  # 使用 -v 打印详细请求和响应信息
 
