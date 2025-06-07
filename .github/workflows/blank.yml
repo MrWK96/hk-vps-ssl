@@ -5,14 +5,14 @@ on:
     - cron: '0 0 */60 * *'  # 每60天执行一次
   workflow_dispatch:  # 支持手动触发
 
-# env:
-#   DOMAIN1: ${{ secrets.DOMAIN1 }}
-#   DOMAIN2: ${{ secrets.DOMAIN2 }}
-#   TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
-#   TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
-#   EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
-#   URL: ${{ secrets.URL }}
-#   PHPSESSID: ${{ secrets.PHPSESSID }}
+env:
+  # DOMAIN1: ${{ secrets.DOMAIN1 }}
+  # DOMAIN2: ${{ secrets.DOMAIN2 }}
+  # TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+  # TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+  # EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
+  URL: ${{ secrets.URL }}
+  PHPSESSID: ${{ secrets.PHPSESSID }}
 
 jobs:
   ssl_certificate:
