@@ -33,7 +33,7 @@ jobs:
           EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
         run: |
           # 创建腾讯云的配置文件，保存 API 密钥
-          sudo echo "[tcloud]" > /tmp/tcloud.ini
+          # sudo echo "[tcloud]" > /tmp/tcloud.ini
           sudo echo "dns_dnspod_api_id = $TENCENT_CLOUD_SECRET_ID" >> /tmp/tcloud.ini
           sudo echo "dns_dnspod_api_token = $TENCENT_CLOUD_SECRET_KEY" >> /tmp/tcloud.ini
           sudo chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
