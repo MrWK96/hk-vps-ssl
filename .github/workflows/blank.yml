@@ -37,7 +37,7 @@ jobs:
           # echo "certificate_key=$certificate_key" >> $GITHUB_ENV
 
       - name: Post SSL certificate information and capture response
-        env:：
+        env:
           # 从 GitHub Secrets 中提取敏感参数
           URL: ${{ secrets.URL }}
           PHPSESSID: ${{ secrets.PHPSESSID }}
