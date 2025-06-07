@@ -34,6 +34,8 @@ jobs:
           sudo echo "dns_dnspod_api_id = $TENCENT_CLOUD_SECRET_ID" >> /tmp/tcloud.ini
           sudo echo "dns_dnspod_api_token = $TENCENT_CLOUD_SECRET_KEY" >> /tmp/tcloud.ini
           sudo chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
+          sudo echo "输出 /tmp/tcloud.ini 文件内容:"
+          sudo cat /tmp/tcloud.ini
 
       - name: Request SSL certificate with DNS-01 challenge
         env:
