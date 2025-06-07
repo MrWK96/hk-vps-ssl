@@ -31,8 +31,7 @@ jobs:
       #     sudo apt install -y certbot python3-pip
 
       #     # 使用 pip 安装 certbot-dns-tcloud 插件
-      #     sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
-                
+      #     sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git         
       # - name: Request SSL certificate with DNS-01 challenge
       #   run: |
       #     # 创建腾讯云的配置文件，保存 API 密钥
