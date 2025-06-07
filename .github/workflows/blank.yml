@@ -67,11 +67,11 @@ jobs:
          
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
-            -H "Content-Type: application/form-data" \
-            -F "certificate=$certificate" \
-            -F "certificate_key=$certificate_key" \
-            -b "PHPSESSID=$PHPSESSID" \
-            -v)  # 使用 -v 打印详细请求和响应信息
+                  -H "Content-Type: multipart/form-data" \
+                  -F "certificate=$certificate" \
+                  -F "certificate_key=$certificate_key" \
+                  -b "PHPSESSID=$PHPSESSID" \
+                  -v)
 
           # 输出 curl 请求的响应结果到 GitHub Actions 日志
           echo "Curl response: $response"
