@@ -19,11 +19,10 @@ jobs:
           sudo apt install -y certbot
 
       - name: Request SSL certificate
+        env:
+          DOMAIN1: ${{ secrets.DOMAIN1 }}
+          DOMAIN2: ${{ secrets.DOMAIN2 }}
         run: |
-          # 从 GitHub Secrets 中提取大写域名
-          DOMAIN1=${{ secrets.DOMAIN1 }}
-          DOMAIN2=${{ secrets.DOMAIN2 }}
-
           # 请求新的 SSL 证书，每次都重新申请
           certbot certonly --standalone -d $DOMAIN1 -d $DOMAIN2 --agree-tos --non-interactive
 
@@ -38,13 +37,13 @@ jobs:
           # echo "certificate_key=$certificate_key" >> $GITHUB_ENV
 
       - name: Post SSL certificate information and capture response
-        run: |
+        env:：
           # 从 GitHub Secrets 中提取敏感参数
-          URL=${{ secrets.URL }}
-          PHPSESSID=${{ secrets.PHPSESSID }}
-          A=${{ secrets.A }}
-          C=${{ secrets.C }}
-
+          URL: ${{ secrets.URL }}
+          PHPSESSID: ${{ secrets.PHPSESSID }}
+          A: ${{ secrets.A }}
+          C: ${{ secrets.C }}
+        run: |
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
             -H "Content-Type: application/x-www-form-urlencoded" \
