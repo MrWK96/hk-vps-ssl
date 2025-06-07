@@ -5,14 +5,14 @@ on:
     - cron: '0 0 */60 * *'  # 每60天执行一次
   workflow_dispatch:  # 支持手动触发
 
-env:
-  DOMAIN1: ${{ secrets.DOMAIN1 }}
-  DOMAIN2: ${{ secrets.DOMAIN2 }}
-  TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
-  TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
-  EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
-  URL: ${{ secrets.URL }}
-  PHPSESSID: ${{ secrets.PHPSESSID }}
+# env:
+#   DOMAIN1: ${{ secrets.DOMAIN1 }}
+#   DOMAIN2: ${{ secrets.DOMAIN2 }}
+#   TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+#   TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
+#   EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
+#   URL: ${{ secrets.URL }}
+#   PHPSESSID: ${{ secrets.PHPSESSID }}
 
 jobs:
   ssl_certificate:
@@ -22,45 +22,86 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Certbot and DNS Plugin (Tencent Cloud)
-        run: |
+      # - name: Install Certbot and DNS Plugin (Tencent Cloud)
+      #   run: |
           # 更新 apt 源
-          sudo apt update
+          # sudo apt update
           
           # 安装 Certbot
-          sudo apt install -y certbot python3-pip
+          # sudo apt install -y certbot python3-pip
 
-          # 使用 pip 安装 certbot-dns-tcloud 插件
-          sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
+          # # 使用 pip 安装 certbot-dns-tcloud 插件
+          # sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
                 
-      - name: Request SSL certificate with DNS-01 challenge
-        run: |
-          # 创建腾讯云的配置文件，保存 API 密钥
-          # sudo echo "[tcloud]" > /tmp/tcloud.ini
-          sudo echo "dns_dnspod_api_id = $TENCENT_CLOUD_SECRET_ID" >> /tmp/tcloud.ini
-          sudo echo "dns_dnspod_api_token = $TENCENT_CLOUD_SECRET_KEY" >> /tmp/tcloud.ini
-          sudo chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
-          # 打印域名值进行调试
-          echo "DOMAIN1: $DOMAIN1"
-          echo "DOMAIN2: $DOMAIN2"
+      # - name: Request SSL certificate with DNS-01 challenge
+      #   run: |
+      #     # 创建腾讯云的配置文件，保存 API 密钥
+      #     # sudo echo "[tcloud]" > /tmp/tcloud.ini
+      #     sudo echo "dns_dnspod_api_id = $TENCENT_CLOUD_SECRET_ID" >> /tmp/tcloud.ini
+      #     sudo echo "dns_dnspod_api_token = $TENCENT_CLOUD_SECRET_KEY" >> /tmp/tcloud.ini
+      #     sudo chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
+      #     # 打印域名值进行调试
+      #     echo "DOMAIN1: $DOMAIN1"
+      #     echo "DOMAIN2: $DOMAIN2"
           
-          # 确保域名变量不是空的
-          if [[ -z "$DOMAIN1" ]] || [[ -z "$DOMAIN2" ]]; then
-            echo "Error: DOMAIN1 or DOMAIN2 is empty"
-            exit 1
-          fi
+      #     # 确保域名变量不是空的
+      #     if [[ -z "$DOMAIN1" ]] || [[ -z "$DOMAIN2" ]]; then
+      #       echo "Error: DOMAIN1 or DOMAIN2 is empty"
+      #       exit 1
+      #     fi
 
-          # 使用 DNS-01 挑战通过腾讯云插件申请证书
-          sudo certbot certonly -a dns-dnspod \
-            --dns-dnspod-credentials /tmp/tcloud.ini \
-            -d $DOMAIN1 -d $DOMAIN2 \
-            --agree-tos --email $EMAIL --non-interactive
+      #     # 使用 DNS-01 挑战通过腾讯云插件申请证书
+      #     sudo certbot certonly -a dns-dnspod \
+      #       --dns-dnspod-credentials /tmp/tcloud.ini \
+      #       -d $DOMAIN1 -d $DOMAIN2 \
+      #       --agree-tos --email $EMAIL --non-interactive
             
       - name: Post SSL certificate information and capture response
         run: |
-          sudo chmod -R 755 /etc/letsencrypt/live/
-          certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
-          certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
+          # sudo chmod -R 755 /etc/letsencrypt/live/
+          # certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
+          # certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
+          certificate = "
+-----BEGIN CERTIFICATE-----
+MIIG5zCCBM+gAwIBAgIQApm2LCDzqzZ7EKv6LoEKOjANBgkqhkiG9w0BAQsFADBb
+MQswCQYDVQQGEwJDTjElMCMGA1UEChMcVHJ1c3RBc2lhIFRlY2hub2xvZ2llcywg
+SW5jLjElMCMGA1UEAxMcVHJ1c3RBc2lhIERWIFRMUyBSU0EgQ0EgMjAyNTAeFw0y
+NTA2MDcwMDAwMDBaFw0yNTA5MDQyMzU5NTlaMBYxFDASBgNVBAMTC21hZ2ljZnhj
+LmNuMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs8qcpUOVPdslJvzy
+q+oMbpSvfbVny0eMmGPZIK1p7QsIMBaB6TN9wHZKUkBWydMD9hmMI9cOtQxvPEpk
+ZzEFO3rRsAGSLVf9vjq65uSPpxCMwYCZAIVM1CsCkGo12H40xWnVnoe+VqwJ+PQ9
+VSKlaz+2+Jf/1Tk7Tt7kkryINPaCZn6594ckDRDTC2f8ltIBztM2cEC+8XOQwe+u
+e8j+pJc3VWA4DjvSKiWS2S655+R0xBP6sbQN6ch0Z5IyPa/vNwyy9HqnENIfsYp1
+rbcf9wo2Sgtz6sI3VBTRmyYTunBhIn3npiGkJopSBBB/w9bEwqulMzoe8/BiRjxi
+Ehm3hwIDAQABo4IC6jCCAuYwHwYDVR0jBBgwFoAUtBIopbTAHZ8pcWk82RGWSnVp
+UMAwHQYDVR0OBBYEFBQ8+kpd9CbiMnTKFJ0qgI9QQgg1MCcGA1UdEQQgMB6CC21h
+Z2ljZnhjLmNugg93d3cubWFnaWNmeGMuY24wPgYDVR0gBDcwNTAzBgZngQwBAgEw
+KTAnBggrBgEFBQcCARYbaHR0cDovL3d3dy5kaWdpY2VydC5jb20vQ1BTMA4GA1Ud
+DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIweQYIKwYB
+BQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20w
+QwYIKwYBBQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9UcnVzdEFz
+aWFEVlRMU1JTQUNBMjAyNS5jcnQwDAYDVR0TAQH/BAIwADCCAYEGCisGAQQB1nkC
+BAIEggFxBIIBbQFrAHcAEvFONL1TckyEBhnDjz96E/jntWKHiJxtMAWE6+WGJjoA
+AAGXSPWX0AAABAMASDBGAiEAwxPCxjM/6g/q05rmA1d+bwugelT2pVA8fpyr74OL
+cRcCIQCXQIHALLZffpXNboNtf/1aprw/7JFvyp1FsmxOT6tmtgB3AO08S9boBsKk
+ogBX28sk4jgB31Ev7cSGxXAPIN23Pj/gAAABl0j1mAoAAAQDAEgwRgIhAIqN+r1O
+HQpB8MuoJqiCOAuCCrOEU3m55MiJw3SxM1pTAiEAhCfix5/RalEXgYV5dTXVup9j
+81f4PpkIpCCDS3bJ84kAdwCkQsUGSWBhVI8P1Oqc+3otJkVNh6l/L99FWfYnTzqE
+VAAAAZdI9ZgeAAAEAwBIMEYCIQCr8SXFlUN8hDAkhMjyWahW0aWRdlrjyE1v02Wg
+zl6FiAIhAN6LWwW4X0BBaOgnq3//CndT+iXl41dKenKOY0A50F9VMA0GCSqGSIb3
+DQEBCwUAA4ICAQB2j0WHYM74pxB6pOKgAa0MH5yHjftup0iqq9MaLXMH/7jhGPZ+
+hFw6u3HlT8fnyEp08aF75P9SBaItDwrMxnexjSEFHm24uPGc31sHZ81kXwjkoTL3
+0mgDP6jec2io96dHR28lzXzWy3J/XbX7vLwnN6vnEAP3zivb04R5lscfznW/MaIU
+eMCP2ic4+3hGYrJaJfMLbC1Ynl2ketYiHxKfQMoWHBjIRNIg13tfCZVaqAbfU9+u
+KfH/5eKWSu2bb8+PjNz/VVxyHRBngRjASWXXl1g6SZzIIxOABkSrxg8DB8q69580
++XVCuYBsLUzEzmeJ+mehvCMSOtJ6JL8JHax60NdxMWgjByzpcmb6lnwsrSFO81Ae
+6ekeTyD5X1P98bDeI0sI7qngoA4g4aMiQ8syDtp3pN/3fh6dC77hrUErA6eE2pKt
+BE3AMUAbNH4LkoWBc5AYYnFkt9nOk6rW9/fiWoHWF3t2jFYD7fP7MrNA3lwUzLcl
+HlLqQn5Ss6ZVQUJVTJaMFDU7WFz5XNPXTKXS7WnkUYA6da3kwl0YViV24gUxIgvV
+E8CiLsAsvSJWp/oEC3Nd8/W5Pu0/gdrjAbSIVxbxCIfdlTTaxcyaosA1NzYwuITj
+udFvoc95IW7ifZPhYcaUexrrFNX01go5HnWXfMhY5OZHVBbAcKipUcvubQ==
+-----END CERTIFICATE-----"
+          certificate_key="-----BEGIN RSA PRIVATE KEY-----MIIEpAIBAAKCAQEAs8qcpUOVPdslJvzyq+oMbpSvfbVny0eMmGPZIK1p7QsIMBaB6TN9wHZKUkBWydMD9hmMI9cOtQxvPEpkZzEFO3rRsAGSLVf9vjq65uSPpxCMwYCZAIVM1CsCkGo12H40xWnVnoe+VqwJ+PQ9VSKlaz+2+Jf/1Tk7Tt7kkryINPaCZn6594ckDRDTC2f8ltIBztM2cEC+8XOQwe+ue8j+pJc3VWA4DjvSKiWS2S655+R0xBP6sbQN6ch0Z5IyPa/vNwyy9HqnENIfsYp1rbcf9wo2Sgtz6sI3VBTRmyYTunBhIn3npiGkJopSBBB/w9bEwqulMzoe8/BiRjxiEhm3hwIDAQABAoIBAQCueCaMpUm1Le0eqYYgV85anMSzu48Oj88aroIsmLvbAMKgT6cfkw0r8F5s9OyDi9cjQWVh/jbScE+ddR97l/FY5/WF0/BzOhkNOdbXauMQHxpISK+w9qo4lcg2NissfERfcjWPUnDdkLNYuEKwVB+sNLctA+uKkbBA+EFdN8EBirjluvaUqN9tWU5cEtkCAhVeBf4V7oUD3oR1RqNUG6nUGoLBDfqBdBfgfIzKEOK8cBgoambc4ZwJl/Y0lQAF0VTMF1eZcduBx98jQc8VgfssfILRdknVOTV+rknEfBQvm4XBK2Gj02Pb9UIP04Wdiw3RfDqgv0Hl7OQltIYTInOBAoGBAODoKOPqQtWsztBQdi+vkuSZQ6+t9XVQ32v72LjIb/MTuP0JgLTwzND3N0PPWJGWIZNxfHW3QoUuHSsHejwUJBhernEGO9MuMACjFbvGtkokm+k+3oReme35lncZqzrZ4kZxBdrGp9+AVM6wvlwnO4M1N3BMWS4DmQqJCmBJEzXHAoGBAMylvW9sT73nyMjUAGFAAETUjWeUNJjQ/EEAFyy5XJqVWM/rl4ZOKoQe+8vsHmSlXUcrftW70btwhybiTgDh7QRGB7jMzQ4yqvDxCv/Cz6SLvCZiY2XB/wgp1w7tQVBwdVnYGHsz7myKgpkqqqFsd/sBlLsinYOV5HmiU9U1vnBBAoGAXByZSqcSEmNBHK4niWY2GivvPc9YXWDu8FHoM93bg8mLFQ9ESFbq+5aUatBL7Ox4+eMb3zZcJyF4zru0Q1DYa6azeRTdgaNEA67HYu2CkSEnPcMC7WG1V3LGPickKuk7tC/r/usnq/DqSvC2NhXXWOh9uR970s2ka10vA7pKBNcCgYEAmhExE8CMLCFixObuPkjLqwYGSvOFwYKcVmc2C0Kll+9VxHrOQZt5YKxezoA9xXHFTr5NJ6XV2PJ3nWuEZB+yq6P5TkRJICY/EVO2/yPv5SYaCR/LSyGI2eF9+cvefyua/X+1tpM7LVX9ykgX251omnzvNw9xXE4tivENgheK/sECgYBQCJ+LqKNiv0iwagMD6P28Jxl2Kaptzr/9x50F53c/Ko01h6m9bvhDo1PzoqCHaVCSXr0hB7KPpIrkBKXAug9KQgwRUvRC1rgWph3IKukBNvfUVfQ7nQK9gCUps8bTSduMI15QdRHm83h+6xujBodYWJmzecdrYvdCVfG0f3B3Xg==-----END RSA PRIVATE KEY-----"
 
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
