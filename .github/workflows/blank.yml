@@ -22,14 +22,14 @@ jobs:
           sudo apt install -y certbot python3-pip
 
           # 使用 pip 安装 certbot-dns-tcloud 插件
-          sudo pip3 install certbot-dns-tcloud
+          sudo pip3 install certbot-dns-tencentcloud
 
       - name: Create Tencent Cloud credentials file
         run: |
           # 创建腾讯云的配置文件，保存 SecretId 和 SecretKey
           echo "[tcloud]" > /tmp/tcloud.ini
-          echo "secret_id = ${{ secrets.TENCENT_CLOUD_SECRET_ID }}" >> /tmp/tcloud.ini
-          echo "secret_key = ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}" >> /tmp/tcloud.ini
+          echo "dns_tencentcloud_secret_id = ${{ secrets.TENCENT_CLOUD_SECRET_ID }}" >> /tmp/tcloud.ini
+          echo "dns_tencentcloud_secret_key = ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}" >> /tmp/tcloud.ini
           chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
 
       - name: Request SSL certificate with DNS-01 challenge
@@ -49,8 +49,8 @@ jobs:
           fi
 
           # 使用 DNS-01 挑战通过腾讯云插件申请证书
-          sudo certbot certonly --dns-tcloud \
-            --dns-tcloud-credentials /tmp/tcloud.ini \
+          sudo certbot certonly -a dns-tencentcloud \
+            --dns-tencentcloud-credentials /tmp/tcloud.ini \
             -d $DOMAIN1 -d $DOMAIN2 \
             --agree-tos --email $EMAIL --non-interactive
 
