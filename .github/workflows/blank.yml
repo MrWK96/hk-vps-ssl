@@ -63,9 +63,8 @@ jobs:
           C=${{ secrets.C }}
 
           sudo chmod -R 755 /etc/letsencrypt/live/
-          sudo ls -l /etc/letsencrypt/live/$DOMAIN1
-          certificate=$(cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
-          certificate_key=$(cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
+          certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
+          certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
