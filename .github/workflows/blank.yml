@@ -24,14 +24,14 @@ jobs:
 
       # - name: Install Certbot and DNS Plugin (Tencent Cloud)
       #   run: |
-          # 更新 apt 源
-          # sudo apt update
+      #     更新 apt 源
+      #     sudo apt update
           
-          # 安装 Certbot
-          # sudo apt install -y certbot python3-pip
+      #     安装 Certbot
+      #     sudo apt install -y certbot python3-pip
 
-          # # 使用 pip 安装 certbot-dns-tcloud 插件
-          # sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
+      #     # 使用 pip 安装 certbot-dns-tcloud 插件
+      #     sudo pip install git+https://github.com/tengattack/certbot-dns-dnspod.git
                 
       # - name: Request SSL certificate with DNS-01 challenge
       #   run: |
