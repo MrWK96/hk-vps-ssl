@@ -52,17 +52,7 @@ jobs:
             --dns-dnspod-credentials /tmp/tcloud.ini \
             -d $DOMAIN1 -d $DOMAIN2 \
             --agree-tos --email $EMAIL --non-interactive
-
-      - name: Save SSL certificate details
-        run: |
-          # 获取并保存证书路径和密钥
-          certificate=$(cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
-          certificate_key=$(cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
-
-          # 输出证书和密钥内容，供后续步骤使用
-          echo "certificate=$certificate" >> $GITHUB_ENV
-          echo "certificate_key=$certificate_key" >> $GITHUB_ENV
-
+            
       - name: Post SSL certificate information and capture response
         run: |
           # 从 GitHub Secrets 中提取敏感参数
@@ -70,6 +60,9 @@ jobs:
           PHPSESSID=${{ secrets.PHPSESSID }}
           A=${{ secrets.A }}
           C=${{ secrets.C }}
+
+          certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
+          certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
