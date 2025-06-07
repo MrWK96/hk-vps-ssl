@@ -30,8 +30,6 @@ sudo apt install -y certbot
 - name: Request SSL certificate
 run: |
 # 请求新的 SSL 证书，每次都重新申请
-echo "DOMAIN1: $DOMAIN1"
-echo "DOMAIN2: $DOMAIN2"
 certbot certonly --standalone -d $DOMAIN1 -d $DOMAIN2 --agree-tos --non-interactive
 
 - name: Save SSL certificate details
