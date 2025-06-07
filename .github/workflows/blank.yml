@@ -13,17 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Certbot and DNS Plugin (Cloudflare as an example)
+      - name: Install Certbot and DNS Plugin (Tencent Cloud)
         run: |
           sudo apt update
-          sudo apt install -y certbot python3-certbot-dns-cloudflare
+          sudo apt install -y certbot python3-certbot-dns-tcloud
+
+      - name: Create Tencent Cloud credentials file
+        run: |
+          # 创建腾讯云的配置文件，保存 SecretId 和 SecretKey
+          echo "[tcloud]" > /tmp/tcloud.ini
+          echo "secret_id = ${{ secrets.TENCENT_CLOUD_SECRET_ID }}" >> /tmp/tcloud.ini
+          echo "secret_key = ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}" >> /tmp/tcloud.ini
+          chmod 600 /tmp/tcloud.ini  # 确保文件权限安全
 
       - name: Request SSL certificate with DNS-01 challenge
         env:
           DOMAIN1: ${{ secrets.DOMAIN1 }}
           DOMAIN2: ${{ secrets.DOMAIN2 }}
           EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}  # 从 Secrets 中获取 Cloudflare API Token
         run: |
           # 打印域名值进行调试
           echo "DOMAIN1: $DOMAIN1"
@@ -35,9 +42,9 @@ jobs:
             exit 1
           fi
 
-          # 使用 DNS-01 挑战通过 Cloudflare 插件申请证书
-          sudo certbot certonly --dns-cloudflare \
-            --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini \
+          # 使用 DNS-01 挑战通过腾讯云插件申请证书
+          sudo certbot certonly --dns-tcloud \
+            --dns-tcloud-credentials /tmp/tcloud.ini \
             -d $DOMAIN1 -d $DOMAIN2 \
             --agree-tos --email $EMAIL --non-interactive
 
