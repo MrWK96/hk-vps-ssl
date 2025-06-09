@@ -60,6 +60,8 @@ jobs:
           certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
           certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
+          echo "certificate: $certificate; certificate_key: $certificate_key"
+
           # 通过 curl 登录，并保存cookie信息
           curl -c cookies.txt -X POST -d "username=$USERNAME&passwd=$PASSWORD" $LOGIN_URL
           
