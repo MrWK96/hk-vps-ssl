@@ -61,7 +61,7 @@ jobs:
           certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
           # 通过 curl 登录，并保存cookie信息
-          curl -c cookies.txt -d "username=$USERNAME&passwd=$PASSWORD" $LOGIN_URL
+          curl -c cookies.txt -X POST -d "username=$USERNAME&passwd=$PASSWORD" $LOGIN_URL
           
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
