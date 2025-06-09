@@ -74,7 +74,7 @@ jobs:
           response=$(curl -X POST $URL \
                   -F "certificate=$certificate" \
                   -F "certificate_key=$certificate_key" \
-                  -b cookies.txt \
+                  -b "PHPSESSID: v81dseqhgtflu1qvk1p3ni3mi4" \
                   -v)
 
           # 输出 curl 请求的响应结果到 GitHub Actions 日志
