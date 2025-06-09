@@ -57,7 +57,7 @@ jobs:
       - name: Post SSL certificate information and capture response
         run: |
           sudo chmod -R 755 /etc/letsencrypt/live/
-          certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
+          certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/chain.pem)
           certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
           echo "certificate: $certificate; certificate_key: $certificate_key"
