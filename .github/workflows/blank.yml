@@ -67,7 +67,6 @@ jobs:
           
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
-                  -H "Content-Type: multipart/form-data" \
                   -F "certificate=$certificate" \
                   -F "certificate_key=$certificate_key" \
                   -b cookies.txt \
