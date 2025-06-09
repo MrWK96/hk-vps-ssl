@@ -46,7 +46,7 @@ jobs:
           echo "DOMAIN2: $DOMAIN2"
 
           # 使用 DNS-01 挑战通过腾讯云插件申请证书
-          sudo certbot certonly -a dns-dnspod \
+          sudo certbot certonly --staging -a dns-dnspod \
             --dns-dnspod-credentials /tmp/tcloud.ini \
             -d $DOMAIN1 -d $DOMAIN2 \
             --agree-tos --email $EMAIL --non-interactive
