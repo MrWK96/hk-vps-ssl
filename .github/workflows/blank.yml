@@ -11,8 +11,11 @@ env:
   TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
   TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
   EMAIL: ${{ secrets.EMAIL }}  # 从 GitHub Secrets 中获取电子邮件
+  LOGIN_URL: ${{ secrets.LOGIN_URL }}
   URL: ${{ secrets.URL }}
-  PHPSESSID: ${{ secrets.PHPSESSID }}
+  LOGOUT_URL: ${{ secrets.LOGOUT_URL }}
+  USERNAME: ${{ secrets.USERNAME }}
+  PASSWORD: ${{ secrets.PASSWORD }}
   certificate: ${{ secrets.CERTIFICATE }}
   certificate_key: ${{ secrets.CERTIFICATE_KEY }}
 
@@ -57,13 +60,20 @@ jobs:
           certificate=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/fullchain.pem)
           certificate_key=$(sudo cat /etc/letsencrypt/live/$DOMAIN1/privkey.pem)
 
+          # 通过 curl 登录，并保存cookie信息
+          curl -c cookies.txt -d "username=$USERNAME&passwd=$PASSWORD" $LOGIN_URL
+          
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
                   -H "Content-Type: multipart/form-data" \
                   -F "certificate=$certificate" \
                   -F "certificate_key=$certificate_key" \
-                  -b "PHPSESSID=$PHPSESSID" \
+                  -b cookies.txt \
                   -v)
 
           # 输出 curl 请求的响应结果到 GitHub Actions 日志
           echo "Curl response: $response"
+
+          # 通过 curl 登出，并保存cookie信息
+          curl -b cookies.txt $LOGOUT_URL
+          
