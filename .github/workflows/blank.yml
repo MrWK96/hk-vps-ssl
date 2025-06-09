@@ -76,5 +76,5 @@ jobs:
           echo "Curl response: $response"
 
           # 通过 curl 登出，并保存cookie信息
-          curl -b cookies.txt $LOGOUT_URL
+          # curl -b cookies.txt $LOGOUT_URL
           
