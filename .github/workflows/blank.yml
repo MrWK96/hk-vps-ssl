@@ -64,11 +64,11 @@ jobs:
           echo "certificate: $certificate; certificate_key: $certificate_key"
 
           # 通过 curl 登录，并保存cookie信息
-          # curl -c cookies.txt -X POST $LOGIN_URL \
-          #         -H "Content-Type: application/x-www-form-urlencoded" \
-          #         -H "User-Agent: Mozilla/5.0" \
-          #         -H "Referer: $REFER_URL" \
-          #         -d "username=$USERNAME&passwd=$PASSWORD&csrfmiddlewaretoken=$TOKEN"
+          curl -c cookies.txt -X POST $LOGIN_URL \
+                  -H "Content-Type: application/x-www-form-urlencoded" \
+                  -H "User-Agent: Mozilla/5.0" \
+                  -H "Referer: $REFER_URL" \
+                  -d "username=$USERNAME&passwd=$PASSWORD"
           
           # 通过 curl 发起 POST 请求，并将结果保存到变量
           response=$(curl -X POST $URL \
