@@ -2,7 +2,7 @@ name: SSL Certificate Request and Post
 
 on:
   schedule:
-    - cron: '0 0 */60 * *'  # 每60天执行一次
+    - cron: '0 0 */45 * *'  # 每45天执行一次
   workflow_dispatch:  # 支持手动触发
 
 env:
